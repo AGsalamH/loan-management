@@ -19,14 +19,14 @@ class UserViewSet(CreatePermissionMixin, viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
 
 
-class CustomerViewSet(CreatePermissionMixin, viewsets.ModelViewSet):
+class LoanCustomerViewSet(CreatePermissionMixin, viewsets.ModelViewSet):
     '''Create, Retrieve and modify information for a loan Customer.'''
     queryset = LoanCustomer.objects.all()
     serializer_class = LoanCustomerSerializer
     permission_classes = (IsLoanCustomer,)
 
 
-class ProviderViewSet(CreatePermissionMixin, viewsets.ModelViewSet):
+class LoanProviderViewSet(CreatePermissionMixin, viewsets.ModelViewSet):
     '''Create, Retrieve and modify information for a loan Provider.'''
     queryset = LoanProvider.objects.all()
     serializer_class = LoanProviderSerializer
