@@ -1,4 +1,4 @@
-from rest_framework.permissions import BasePermission
+from rest_framework.permissions import BasePermission, AllowAny
 
 
 class RegisterOrIsAuthenticated(BasePermission):
@@ -31,3 +31,11 @@ class IsLoanCustomer(BasePermission):
     '''permission to check if a user is a loan customer.'''
     def has_permission(self, request, view):
         return request.user and request.user.is_authenticated and hasattr(request.user, 'loan_customer')
+
+
+class CreatePermissionMixin:
+    def get_permissions(self):
+        if self.action == 'post' or self.action == 'create':
+            self.permission_classes = [AllowAny]
+
+        return super().get_permissions()

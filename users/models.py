@@ -18,13 +18,6 @@ from common.models import BaseModel
 # Create your models here.
 
 
-class Roles(models.TextChoices):
-    '''Role Choices.'''
-    LOAN_PROVIDER = 'LOAN_PROVIDER', _('Loan Provider')
-    LOAN_CUSTOMER = 'LOAN_CUSTOMER', _('Loan Customer')
-    BANK_PERSONNEL = 'BANK_PERSONNEL', _('Bank Personnel')
-
-
 class UserManager(BaseUserManager):
     use_in_migrations = True
 
@@ -120,7 +113,7 @@ class LoanCustomer(BaseModel):
         return self.user.username
 
 
-class LoanProvider(models.Model):
+class LoanProvider(BaseModel):
     '''Represents Loan Provider.'''
 
     user = models.OneToOneField('User', on_delete=models.CASCADE, related_name='loan_provider')
@@ -131,7 +124,7 @@ class LoanProvider(models.Model):
        return self.user.username
 
 
-class BankPersonnel(models.Model):
+class BankPersonnel(BaseModel):
     '''Represents Bank Employee.'''
 
     user = models.OneToOneField('User', on_delete=models.CASCADE, related_name='bank_personnel')

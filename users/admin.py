@@ -1,11 +1,12 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
+from unfold.admin import ModelAdmin as UnfoldModelAdmin
 
-from users.models import User
+from users.models import User, LoanCustomer, LoanProvider, BankPersonnel
 # Register your models here.
 
 @admin.register(User)
-class CustomUserAdmin(UserAdmin):
+class CustomUserAdmin(UserAdmin, UnfoldModelAdmin):
 
     list_display = ('username', 'created_at')
     search_fields = ('username', 'created_at')
@@ -29,3 +30,16 @@ class CustomUserAdmin(UserAdmin):
     ordering = ('username',)
     
     readonly_fields = ('created_at', 'last_login')
+
+
+@admin.register(LoanCustomer)
+class LoanCustomerModelAdmin(UnfoldModelAdmin):
+    pass
+
+@admin.register(LoanProvider)
+class LoanProviderModelAdmin(UnfoldModelAdmin):
+    pass
+
+@admin.register(BankPersonnel)
+class BankPersonnelModelAdmin(UnfoldModelAdmin):
+    pass
