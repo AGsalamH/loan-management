@@ -1,6 +1,7 @@
-from rest_framework import permissions
+from rest_framework.permissions import BasePermission
 
-class RegisterOrIsAuthenticated(permissions.BasePermission):
+
+class RegisterOrIsAuthenticated(BasePermission):
     '''
     Custom permission to allow user creation without authentication,
     but require authentication for retrieving user information.
@@ -12,3 +13,21 @@ class RegisterOrIsAuthenticated(permissions.BasePermission):
 
         # Require authentication for other actions (GET, PUT, DELETE)
         return request.user and request.user.is_authenticated
+
+
+class IsLoanProvider(BasePermission):
+    '''permission to check if a user is loan provider.'''
+    def has_permission(self, request, view):
+        return request.user and request.user.is_authenticated
+
+
+class IsBankPersonnel(BasePermission):
+    '''permission to check if a user is a bank personnel.'''
+    def has_permission(self, request, view):
+        return request.user and request.user.is_authenticated and hasattr(request.user, 'bank_personnel')
+
+
+class IsLoanCustomer(BasePermission):
+    '''permission to check if a user is a loan customer.'''
+    def has_permission(self, request, view):
+        return request.user and request.user.is_authenticated and hasattr(request.user, 'loan_customer')
