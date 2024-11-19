@@ -33,7 +33,14 @@ class UserManager(BaseUserManager):
         Create and save a user with the given username and password.
         '''
 
-        user = self.model(name=name, username=username, **extra_fields)
+        if not extra_fields.get('role'):
+            raise ValueError(_('role value must be set.'))
+
+        user = self.model(
+            name=name,
+            username=username,
+            **extra_fields
+        )
         user.password = make_password(password)
         user.save(using=self._db)
         return user
@@ -50,20 +57,21 @@ class UserManager(BaseUserManager):
 
         return self._create_user(name, username, password, **extra_fields)
 
-    def create_staffuser(self, name, username, password, **extra_fields):
-        extra_fields.setdefault('is_superuser', False)
-        extra_fields.setdefault('is_staff', True)
-
-        if extra_fields.get("is_staff") is not True:
-            raise ValueError("staff user must have is_staff=True.")
-        if extra_fields.get("is_superuser") is not True:
-            raise ValueError("staff user must have is_superuser=False.")
-
-        return self._create_user(name, username, password, **extra_fields)
-
     def create_user(self, name, username, password, **extra_fields):
+        '''
+        Create normal user (Loan customer or Loan Provider).
+        
+        CAN'T BE BANK_PERSONNEL.
+        '''
+
         extra_fields.setdefault('is_superuser', False)
         extra_fields.setdefault('is_staff', False)
+        
+        if not extra_fields.get('role'):
+            raise ValueError('role value must be set.')
+
+        if extra_fields.get('role').lower() == Roles.BANK_PERSONNEL.value.lower():
+            raise ValueError('NOT allowed user role.')
 
         return self._create_user(name, username, password, **extra_fields)
 
@@ -99,15 +107,15 @@ class User(BaseUser, PermissionsMixin):
     role = models.CharField(max_length=50, choices=Roles.choices)
 
     is_active = models.BooleanField(
-        'active status',
+        _('active status'),
         default=True,
-        help_text='Designates whether this user should be treated as active.'
-        'Unselect this instead of deleting accounts.'
+        help_text=_('Designates whether this user should be treated as active.'
+        'Unselect this instead of deleting accounts.')
     )
     is_staff = models.BooleanField(
-        'staff status',
+        _('staff status'),
         default=False,
-        help_text='Designates whether the user can log into this admin site.',
+        help_text=_('Designates whether the user can log into this admin site.'),
     )
 
     USERNAME_FIELD = 'username'
