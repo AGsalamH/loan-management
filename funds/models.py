@@ -27,7 +27,7 @@ class Fund(BaseModel):
         related_name='funds',
         help_text='Employee responsible for revising the Fund request.')
 
-    status = models.CharField(_('Fund status'), choices=StatusChoices.PENDING)
+    status = models.CharField(_('Fund status'), choices=StatusChoices.choices, default=StatusChoices.PENDING)
 
     class Meta:
         ordering = ('-created_at', )
