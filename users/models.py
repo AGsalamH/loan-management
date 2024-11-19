@@ -32,10 +32,6 @@ class UserManager(BaseUserManager):
         '''
         Create and save a user with the given username and password.
         '''
-
-        if not extra_fields.get('role'):
-            raise ValueError(_('role value must be set.'))
-
         user = self.model(
             name=name,
             username=username,
@@ -48,7 +44,6 @@ class UserManager(BaseUserManager):
     def create_superuser(self, name, username, password, **extra_fields):
         extra_fields.setdefault('is_superuser', True)
         extra_fields.setdefault('is_staff', True)
-        extra_fields.setdefault('role', Roles.BANK_PERSONNEL.value)
 
         if extra_fields.get('is_staff') is not True:
             raise ValueError('Superuser must have is_staff=True.')
@@ -59,19 +54,11 @@ class UserManager(BaseUserManager):
 
     def create_user(self, name, username, password, **extra_fields):
         '''
-        Create normal user (Loan customer or Loan Provider).
-        
-        CAN'T BE BANK_PERSONNEL.
+        Create normal user.
         '''
 
         extra_fields.setdefault('is_superuser', False)
         extra_fields.setdefault('is_staff', False)
-        
-        if not extra_fields.get('role'):
-            raise ValueError('role value must be set.')
-
-        if extra_fields.get('role').lower() == Roles.BANK_PERSONNEL.value.lower():
-            raise ValueError('NOT allowed user role.')
 
         return self._create_user(name, username, password, **extra_fields)
 
@@ -104,8 +91,6 @@ class User(BaseUser, PermissionsMixin):
         },
     )
 
-    role = models.CharField(max_length=50, choices=Roles.choices)
-
     is_active = models.BooleanField(
         _('active status'),
         default=True,
@@ -119,6 +104,6 @@ class User(BaseUser, PermissionsMixin):
     )
 
     USERNAME_FIELD = 'username'
-    REQUIRED_FIELDS = ['name', 'role']
+    REQUIRED_FIELDS = ['name']
 
     objects = UserManager()

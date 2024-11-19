@@ -7,14 +7,14 @@ from users.models import User
 @admin.register(User)
 class CustomUserAdmin(UserAdmin):
 
-    list_display = ('username', 'role')
-    search_fields = ('username', 'role')
+    list_display = ('username', 'created_at')
+    search_fields = ('username', 'created_at')
 
-    list_filter = ('role',)
+    list_filter = ('username', 'created_at', 'is_superuser')
 
     fieldsets = (
         (None, {'fields': ('username', 'name', 'password')}),
-        ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser', 'role', 'groups', 'user_permissions')}),
+        ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
         ('Important dates', {'fields': ('last_login', 'created_at')}),
     )
 
@@ -22,7 +22,7 @@ class CustomUserAdmin(UserAdmin):
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('username', 'name', 'role', 'password1', 'password2', 'is_active', 'is_staff', 'is_superuser'),
+            'fields': ('username', 'name', 'password1', 'password2', 'is_active', 'is_staff', 'is_superuser'),
         }),
     )
 
