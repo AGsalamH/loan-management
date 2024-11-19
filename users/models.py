@@ -107,3 +107,40 @@ class User(BaseUser, PermissionsMixin):
     REQUIRED_FIELDS = ['name']
 
     objects = UserManager()
+
+class LoanCustomer(BaseModel):
+    '''Represents Loan Customer.'''
+
+    user = models.OneToOneField('User', on_delete=models.CASCADE, related_name='loan_customer')
+    address = models.CharField(max_length=120)
+    phone = models.CharField(max_length=30)
+    monthly_income = models.DecimalField(decimal_places=2, max_digits=10)
+
+    def __str__(self):
+        return self.user.username
+
+
+class LoanProvider(models.Model):
+    '''Represents Loan Provider.'''
+
+    user = models.OneToOneField('User', on_delete=models.CASCADE, related_name='loan_provider')
+    phone = models.CharField(max_length=30)
+    address = models.CharField(max_length=120)
+
+    def __str__(self):
+       return self.user.username
+
+
+class BankPersonnel(models.Model):
+    '''Represents Bank Employee.'''
+
+    user = models.OneToOneField('User', on_delete=models.CASCADE, related_name='bank_personnel')
+    bank = models.CharField(max_length=100)
+    branch = models.CharField(max_length=100)
+
+    phone = models.CharField(max_length=30)
+    address = models.CharField(max_length=100)
+
+    def __str__(self):
+       return self.user.username
+
