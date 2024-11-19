@@ -20,3 +20,11 @@ class BaseModel(models.Model):
 
     class Meta:
         abstract = True
+
+
+class StatusChoices(models.TextChoices):
+    AVAILABLE = 'AVAILABLE', 'Available'
+    CLOSED = 'CLOSED', 'Closed'
+    PENDING = 'PENDING', 'Pending'
+    ACTIVE = 'ACTIVE', 'Active'
+    COMPLETED = 'COMPLETED', 'Completed'
