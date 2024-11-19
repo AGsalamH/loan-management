@@ -18,7 +18,7 @@ class Fund(BaseModel):
     max_fund_amount = models.DecimalField(decimal_places=2, max_digits=10, blank=True)
     min_fund_amount = models.DecimalField(decimal_places=2, max_digits=10, blank=True)
 
-    duration = models.IntegerField(help_text=_('Duration in months.'))
+    duration = models.IntegerField(help_text=_('Duration in months.'), blank=True)
 
     initiated_by = models.ForeignKey(LoanProvider, on_delete=models.CASCADE, related_name='funds')
     assigned_to = models.ForeignKey(
