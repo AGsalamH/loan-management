@@ -15,7 +15,7 @@ class SignUpSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('name', 'username', 'password', 'role')
+        fields = ('name', 'username', 'password')
         extra_kwargs = {
             'password': {'write_only': True, 'min_length': 8},            
         }
@@ -34,16 +34,3 @@ class SignUpSerializer(serializers.ModelSerializer):
             user.save()
         return user
 
-    def validate_role(self, role):
-        if role.lower() ==  Roles.BANK_PERSONNEL.value.lower():
-            raise serializers.ValidationError(_('Invalid role.'))
-
-        return role
-
-
-# class LoginSerializer(serializers.ModelSerializer):
-#     password = serializers.CharField(max_length=128, min_length=6, write_only=True)
-
-#     class Meta:
-#         model = User
-#         fields = ('username', 'password')
