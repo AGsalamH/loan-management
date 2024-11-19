@@ -12,7 +12,8 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 from os import environ
-
+from django.urls import reverse_lazy
+from django.utils.translation import gettext_lazy as _
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -32,6 +33,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 DJANGO_APPS = [
+    'unfold',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -154,4 +156,41 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
     ],
+}
+
+
+# UNFOLD
+# ------------------------------------------------------------------------------
+UNFOLD = {
+    'SITE_TITLE': 'Loan Management',
+    'SITE_HEADER': 'Loan Management Admin',
+
+    'SITE_SYMBOL': 'admin_panel_settings',  # symbol from icon set
+    'SHOW_HISTORY': True, # show/hide 'History' button, default: True
+    'SHOW_VIEW_ON_SITE': True, # show/hide 'View on site' button, default: True
+    'SIDEBAR': {
+        'show_search': False,  # Search in applications and models names
+        'show_all_applications': False,  # Dropdown with all applications and models
+        'navigation': [
+            {
+                'title': _('Navigation'),
+                'separator': False,  # Top border
+                'collapsible': True,  # Collapsible group of links
+                'items': [
+                    {
+                        'title': _('Dashboard'),
+                        'icon': 'dashboard',  # Supported icon set: https://fonts.google.com/icons
+                        'link': reverse_lazy('admin:index'),
+                        # 'badge': 'sample_app.badge_callback',
+                        'permission': lambda request: request.user.is_superuser,
+                    },
+                    {
+                        'title': _('Users'),
+                        'icon': 'people',
+                        'link': reverse_lazy('admin:users_user_changelist'),
+                    },
+                ],
+            },
+        ],
+    },
 }
